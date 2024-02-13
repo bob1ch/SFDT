@@ -1,1 +1,0 @@
-### My spam filter implementation
