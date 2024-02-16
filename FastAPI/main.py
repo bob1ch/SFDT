@@ -2,7 +2,7 @@ from typing import Annotated
 
 from enum import Enum
 
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, Path
 from pydantic import BaseModel
 
 class ModelName(str, Enum):
@@ -90,4 +90,15 @@ async def read_items(
         results.update({"q": q})
     return results
 
- 
+#Path parameters
+@app.get("/items_path/{item_id}")
+async def read_items_path(
+    *,
+    item_id: Annotated[int, Path(title="The ID of the item to get", gt=0, le=1000)],
+    q: str,
+    size: Annotated[float, Query(gt=0, lt=10.5)],
+):
+    results = {"item_id": item_id}
+    if q:
+        results.update({"q": q})
+    return results
