@@ -1,11 +1,20 @@
+from typing import Annotated
+
 from enum import Enum
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
+from pydantic import BaseModel
 
 class ModelName(str, Enum):
     alexnet = "alexnet"
     resnet = "resnet"
     lenet = "lenet"
+
+class Item(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
 
 app = FastAPI()
 
@@ -37,3 +46,48 @@ async def read_user_item(
             {"description": "strange description from the FastApi docs"}
         )
     return item
+
+@app.post("/items/")
+async def create_item(item: Item):
+    item_dict = item.dict()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
+
+@app.put("/items/{item_id}")
+async def update_item(item_id: int, item: Item, q: str | None = None):
+    result = {"item_id": item_id, **item.dict()}
+    if q:
+        result.update({"q": q})
+    return result
+
+#Query parameters
+@app.get("/items")
+async def read_items(
+    q: Annotated[
+        str | None,
+        Query(
+            alias="item-query",
+            title="Query string",
+            description="Query string for the items to search in the database that have a good match",
+            min_length=3,
+            max_length=50,
+            pattern="^fixedquery$",
+            deprecated=True,
+            ),
+    ] = None,
+    #hidden_query: Annotated[str | None, Query(include_in_schema=False)] = None
+):
+    """
+    if hidden_query:
+        return {"hidden_query": hidden_query}
+    else:
+        return {"hidden_query": "Not found"}
+    """
+    results = {"items": [{"item_id": "Foo"}, {"item_id": "Bar"}]}
+    if q:
+        results.update({"q": q})
+    return results
+
+ 
