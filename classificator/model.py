@@ -10,21 +10,21 @@ class classificator:
     def __init__(self, ):
         self.clf = DecisionTreeClassifier()
         self.vectorizer = TfidfVectorizer()
-
+        self.X_train, self.X_test, self.y_train, self.y_test = [None for _ in range(4)]
 
     #temporary method for read data
     def read_data_spam(self, data_name: str = 'spam.csv') -> tuple[pd.DataFrame, pd.DataFrame]:
         data = pd.read_csv('spam.csv')
         return data.Message, data.spamORham
     
-    def fit(self, ):
+    def fit(self, ): #EDIT one of parameter must be criterion and max_depth and exclude data parsing from method
         X, y = self.read_data_spam()
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3) #test_size must be const or var
-        X_train, X_test = self.to_vectorize(X_train, X_test)
-        return X_train, X_test, y_train, y_test
-
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=0.3) #test_size must be const or var
+        self.X_train, self.X_test = self.to_vectorize(self.X_train, self.X_test)
+        self.clf.fit(self.X_train, self.y_train)
+        
     def predict(self, ) -> float:
-        raise NotImplementedError()
+        return self.clf.predict(self.X_test)
 
     def score(self, ) -> float:
         raise NotImplementedError()
@@ -43,5 +43,6 @@ if __name__ == '__main__':
     clf = classificator()
 
     print(clf)
-    print(clf.read_data_spam())
-    print(type(clf.fit()))
+    #print(clf.read_data_spam())
+    print(clf.fit())
+    print(clf.predict())
