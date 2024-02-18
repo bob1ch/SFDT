@@ -26,8 +26,8 @@ class classificator:
     def predict(self, ) -> float:
         return self.clf.predict(self.X_test)
 
-    def score(self, ) -> float:
-        raise NotImplementedError()
+    def score(self, ) -> tuple[float, float]:
+        return self.clf.score(self.X_train, self.y_train), self.clf.score(self.X_test, self.y_test)
     
     def get_picture(self, ):
         raise NotImplementedError()
@@ -46,3 +46,4 @@ if __name__ == '__main__':
     #print(clf.read_data_spam())
     print(clf.fit())
     print(clf.predict())
+    print(clf.score())
