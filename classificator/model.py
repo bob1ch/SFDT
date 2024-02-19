@@ -39,10 +39,7 @@ class classificator:
     def to_vectorize(self, X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         return self.vectorizer.fit_transform(X_train), self.vectorizer.transform(X_test)
 
-#delete this comment
-
-
-
+'''
 if __name__ == '__main__':
     clf = classificator()
 
@@ -51,4 +48,4 @@ if __name__ == '__main__':
     print(clf.fit())
     print(clf.predict())
     print(clf.score())
-    clf.get_picture()
+    clf.get_picture()'''
