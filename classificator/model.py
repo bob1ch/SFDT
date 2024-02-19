@@ -1,9 +1,10 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
-
+from sklearn.metrics import ConfusionMatrixDisplay
 
 class classificator:
 
@@ -11,6 +12,7 @@ class classificator:
         self.clf = DecisionTreeClassifier()
         self.vectorizer = TfidfVectorizer()
         self.X_train, self.X_test, self.y_train, self.y_test = [None for _ in range(4)]
+        self.y_pred = None
 
     #temporary method for read data
     def read_data_spam(self, data_name: str = 'spam.csv') -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -24,13 +26,15 @@ class classificator:
         self.clf.fit(self.X_train, self.y_train)
         
     def predict(self, ) -> float:
-        return self.clf.predict(self.X_test)
+        self.y_pred = self.clf.predict(self.X_test) 
+        return self.y_pred
 
     def score(self, ) -> tuple[float, float]:
         return self.clf.score(self.X_train, self.y_train), self.clf.score(self.X_test, self.y_test)
     
     def get_picture(self, ):
-        raise NotImplementedError()
+        ConfusionMatrixDisplay.from_predictions(self.y_test, self.y_pred)
+        plt.savefig("ConfMatrix")
     
     def to_vectorize(self, X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         return self.vectorizer.fit_transform(X_train), self.vectorizer.transform(X_test)
@@ -47,3 +51,4 @@ if __name__ == '__main__':
     print(clf.fit())
     print(clf.predict())
     print(clf.score())
+    clf.get_picture()
