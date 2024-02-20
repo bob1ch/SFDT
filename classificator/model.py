@@ -39,13 +39,10 @@ class classificator:
     def to_vectorize(self, X_train: pd.DataFrame, X_test: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         return self.vectorizer.fit_transform(X_train), self.vectorizer.transform(X_test)
 
-'''
-if __name__ == '__main__':
-    clf = classificator()
 
-    print(clf)
-    #print(clf.read_data_spam())
-    print(clf.fit())
-    print(clf.predict())
-    print(clf.score())
-    clf.get_picture()'''
+def load_model():
+    model = classificator()
+    model.fit()
+
+    return model
+
