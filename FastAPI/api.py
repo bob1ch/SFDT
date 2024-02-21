@@ -15,4 +15,5 @@ def startup_event():
 
 @app.get("/test_model")
 def model_test():
-    return model.predict()
+    print(model.predict())
+    return model.predict()[0]
