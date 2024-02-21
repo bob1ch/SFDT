@@ -16,7 +16,7 @@ class classificator:
 
     #temporary method for read data
     def read_data_spam(self, data_name: str = 'spam.csv') -> tuple[pd.DataFrame, pd.DataFrame]:
-        data = pd.read_csv('spam.csv')
+        data = pd.read_csv('classificator/spam.csv')
         return data.Message, data.spamORham
     
     def fit(self, ): #EDIT one of parameter must be criterion and max_depth and exclude data parsing from method
@@ -25,8 +25,8 @@ class classificator:
         self.X_train, self.X_test = self.to_vectorize(self.X_train, self.X_test)
         self.clf.fit(self.X_train, self.y_train)
         
-    def predict(self, ) -> float:
-        self.y_pred = self.clf.predict(self.X_test) 
+    def predict(self, ) -> list[str]:
+        self.y_pred = self.clf.predict(self.X_test)
         return self.y_pred
 
     def score(self, ) -> tuple[float, float]:
@@ -43,6 +43,5 @@ class classificator:
 def load_model():
     model = classificator()
     model.fit()
-
     return model
 
