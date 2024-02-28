@@ -17,3 +17,9 @@ def startup_event():
 def model_test():
     print(model.predict())
     return model.predict()[0]
+
+@app.get("/get_score")
+def get_score():
+    score = model.score()
+    return {'train': score[0],
+            'test': score[1]}
